@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="font_size_device_list">12sp</dimen>
+    <dimen name="font_size_chat">12sp</dimen>
+    <dimen name="font_size_connected_list">10sp</dimen>
+    <dimen name="font_size_connection_status">11sp</dimen>
+    <dimen name="font_size_button">12sp</dimen>
+    <dimen name="font_size_edit_text">12sp</dimen>
+    <dimen name="font_size_canvas_color">12sp</dimen>
+</resources>

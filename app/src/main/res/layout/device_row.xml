@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/textViewDeviceHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Device: "
+        android:textSize="@dimen/font_size_device_list" />
+
+    <TextView
+        android:id="@+id/textViewDevice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textViewDeviceHeader"
+        android:layout_toRightOf="@id/textViewDeviceHeader"
+        android:hint="OnePlus 8T"
+        android:textSize="@dimen/font_size_device_list" />
+
+    <TextView
+        android:id="@+id/textViewAddressHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewDevice"
+        android:text="Address: "
+        android:textSize="@dimen/font_size_device_list" />
+
+    <TextView
+        android:id="@+id/textViewAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textViewAddressHeader"
+        android:layout_toRightOf="@id/textViewAddressHeader"
+        android:hint="a2:65:44:1e:9b:76"
+        android:textSize="@dimen/font_size_device_list" />
+
+    <TextView
+        android:id="@+id/textViewTypeHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewAddress"
+        android:text="Type: "
+        android:textSize="@dimen/font_size_device_list" />
+
+    <TextView
+        android:id="@+id/textViewType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textViewTypeHeader"
+        android:layout_toRightOf="@id/textViewTypeHeader"
+        android:hint="Bluetooth Classic"
+        android:textSize="@dimen/font_size_device_list" />
+
+</RelativeLayout>

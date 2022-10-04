@@ -1,5 +1,7 @@
 package us.shiroyama.wireless.network
 
+import java.io.InputStream
+
 interface WirelessNetwork<T> {
     companion object {
         const val DEVICE_FOUND_ACTION = "us.shiroyama.wireless.network.DEVICE_FOUND_ACTION"
@@ -16,5 +18,6 @@ interface WirelessNetwork<T> {
     fun scan()
     fun connect(device: T)
     fun write(message: String)
+    fun upload(inputStream: InputStream)
     fun close()
 }

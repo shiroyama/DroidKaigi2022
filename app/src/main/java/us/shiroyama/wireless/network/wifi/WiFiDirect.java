@@ -31,6 +31,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import us.shiroyama.wireless.network.Lifecycle;
+import us.shiroyama.wireless.network.SimpleSocketReader;
 import us.shiroyama.wireless.network.SocketMessageReader;
 import us.shiroyama.wireless.network.WirelessNetwork;
 
@@ -39,6 +40,9 @@ public class WiFiDirect implements WirelessNetwork<WifiP2pDevice>, Lifecycle, Wi
 
     private static final int SOCKET_PORT = 8988;
     private static final int SOCKET_TIMEOUT = 500;
+
+    private static final byte WRITE_FLAG_TEXT = 1;
+    private static final byte WRITE_FLAG_BINARY = 2;
 
     @NonNull
     private final IntentFilter intentFilter = new IntentFilter() {{
@@ -166,6 +170,32 @@ public class WiFiDirect implements WirelessNetwork<WifiP2pDevice>, Lifecycle, Wi
                     return;
                 }
                 clientThread.writeString(message);
+            }
+        });
+    }
+
+    @Override
+    public void upload(@NonNull InputStream inputStream) {
+        if (serverThread == null && clientThread == null) return;
+
+        Log.d(TAG, "upload");
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(() -> {
+            if (isHost) {
+                if (serverThread == null) {
+                    Log.d(TAG, "serverThread is null!");
+                    return;
+                }
+
+                byte[] flagArray = ByteBuffer.allocate(1).put(WRITE_FLAG_BINARY).array();
+                serverThread.write(flagArray);
+            } else {
+                if (clientThread == null) {
+                    Log.d(TAG, "clientThread is null!");
+                    return;
+                }
+                byte[] flagArray = ByteBuffer.allocate(1).put(WRITE_FLAG_BINARY).array();
+                clientThread.write(flagArray);
             }
         });
     }
@@ -328,12 +358,25 @@ public class WiFiDirect implements WirelessNetwork<WifiP2pDevice>, Lifecycle, Wi
         }
 
         private void read() {
-            // SimpleSocketReader simpleSocketReader = new SimpleSocketReader(inputStream, context);
+            SimpleSocketReader simpleSocketReader = new SimpleSocketReader(inputStream, context);
             SocketMessageReader socketMessageReader = new SocketMessageReader(inputStream);
 
             ExecutorService executorService = Executors.newSingleThreadExecutor();
             executorService.submit(() -> {
                 while (socket != null && !socket.isClosed()) {
+                    byte[] lengthBuffer = new byte[1];
+                    try {
+                        inputStream.read(lengthBuffer);
+                        byte flag = ByteBuffer.wrap(lengthBuffer).get();
+                        Log.d(TAG, "read(): flag = " + flag);
+                        switch (flag) {
+                            case 1: {
+
+                            }
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     socketMessageReader.receiveMessage();
                     // simpleSocketReader.receiveMessage();
                 }
@@ -342,6 +385,10 @@ public class WiFiDirect implements WirelessNetwork<WifiP2pDevice>, Lifecycle, Wi
 
         public void writeString(String message) {
             Log.d(TAG, "write(): message = " + message);
+
+            byte flag = 1;
+            byte[] flagArray = ByteBuffer.allocate(1).put(flag).array();
+            write(flagArray);
 
             byte[] messageBytes = message.getBytes(StandardCharsets.UTF_8);
             int length = messageBytes.length;

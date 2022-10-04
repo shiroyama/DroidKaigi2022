@@ -134,6 +134,11 @@ public class WiFiActivity extends WirelessActivity {
             Log.d(TAG, "message: " + message);
             wifiDirect.write(message);
         });
+
+        Button buttonUpload = findViewById(R.id.buttonUpload);
+        buttonUpload.setOnClickListener(view -> {
+            wifiDirect.upload(null);
+        });
     }
 
     @Override

@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         val buttonBLE: Button = findViewById(R.id.buttonBLE)
         buttonBLE.setOnClickListener {
-            val intent = Intent(this, BluetoothActivity::class.java)
+            val intent = Intent(this, BLEActivity::class.java)
             startActivity(intent)
             return@setOnClickListener
         }

@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.NetworkInfo
 import android.net.wifi.p2p.*
-import android.net.wifi.p2p.WifiP2pManager.ConnectionInfoListener
 import android.util.Log
 import us.shiroyama.wireless.network.wifi.WiFiDirectBroadcastReceiver
 
@@ -44,15 +43,13 @@ class WiFiDirectBroadcastReceiver(
                     intent.getParcelableExtra<NetworkInfo>(WifiP2pManager.EXTRA_NETWORK_INFO)
                 val wifiP2pGroup =
                     intent.getParcelableExtra<WifiP2pGroup>(WifiP2pManager.EXTRA_WIFI_P2P_GROUP)
-                if (networkInfo!!.isConnected) {
-                    manager.requestConnectionInfo(
-                        channel,
-                        ConnectionInfoListener { wifiP2pInfo: WifiP2pInfo ->
-                            wifiP2pGroup?.let {
-                                Log.d(TAG, "wifiP2pInfo: $wifiP2pInfo")
-                                activity.onP2PConnected(wifiP2pInfo, wifiP2pGroup)
-                            }
-                        })
+                if (networkInfo?.isConnected == true) {
+                    manager.requestConnectionInfo(channel) { wifiP2pInfo: WifiP2pInfo ->
+                        wifiP2pGroup?.let {
+                            Log.d(TAG, "wifiP2pInfo: $wifiP2pInfo")
+                            activity.onP2PConnected(wifiP2pInfo, wifiP2pGroup)
+                        }
+                    }
                 } else {
                     activity.resetData()
                 }

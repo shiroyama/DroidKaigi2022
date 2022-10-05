@@ -47,7 +47,6 @@ public class LengthSocketReader implements SocketReader {
         try {
             byte[] lengthBuffer = new byte[4];
             inputStream.read(lengthBuffer);
-            long start = System.currentTimeMillis();
             int length = ByteBuffer.wrap(lengthBuffer).getInt();
             Log.d(TAG, "read(): length = " + length);
 

@@ -12,6 +12,10 @@ interface WirelessNetwork<T> {
         const val EXTRA_CONNECTION_STATUS = "us.shiroyama.wireless.network.EXTRA_CONNECTION_STATUS"
         const val EXTRA_CONNECTION_DISCONNECTED = 0
         const val EXTRA_CONNECTION_CONNECTED = 1
+
+        const val MESSAGE_RECEIVED_ACTION =
+            "us.shiroyama.wireless.network.MESSAGE_RECEIVED_ACTION"
+        const val EXTRA_MESSAGE_RECEIVED = "us.shiroyama.wireless.network.MESSAGE_RECEIVED_ACTION"
     }
 
     fun advertise()

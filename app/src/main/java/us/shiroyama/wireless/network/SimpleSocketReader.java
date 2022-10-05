@@ -10,16 +10,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class SimpleSocketReader {
+public class SimpleSocketReader implements SocketReader {
     private static final String TAG = SimpleSocketReader.class.getSimpleName();
 
-    // private static final int BUFFER_SIZE = 1024;
     private static final int BUFFER_SIZE = 8192;
     private static final byte[] INCOMING_BUFF = new byte[BUFFER_SIZE];
-
-    // 10MB
-    private static final int LENGTH_LIMIT = 1024 * 1024 * 10;
-    private static final int RETRY_LIMIT = 5;
 
     @NonNull
     private final InputStream inputStream;
@@ -38,34 +33,36 @@ public class SimpleSocketReader {
         this.context = context;
     }
 
+    @Override
     public void setOnSuccessCallback(@NonNull OnSuccessCallback onSuccessCallback) {
         this.onSuccessCallback = onSuccessCallback;
     }
 
+    @Override
     public void setOnFailureCallback(@NonNull OnFailureCallback onFailureCallback) {
         this.onFailureCallback = onFailureCallback;
     }
 
-    public void receiveMessage() {
-        byte[] buffer = new byte[8192];
+    @Override
+    public void read() {
+        Log.d(TAG, "read() start.");
         try {
             String filename = System.currentTimeMillis() + ".jpg";
+            Log.d(TAG, "read() filename: " + filename);
             FileOutputStream fileOutputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
+            Log.d(TAG, "read() fileOutputStream opened.");
             int length;
-            while ((length = inputStream.read(buffer)) != -1) {
-                fileOutputStream.write(buffer, 0, length);
+            Log.d(TAG, "read() fileOutputStream read buffer start.");
+            while ((length = inputStream.read(INCOMING_BUFF)) != -1) {
+                Log.d(TAG, "read() write to fileOutputStream.");
+                fileOutputStream.write(INCOMING_BUFF, 0, length);
             }
+            Log.d(TAG, "read() fileOutputStream read buffer end.");
             fileOutputStream.close();
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
+        } finally {
+            Log.d(TAG, "read() end.");
         }
-    }
-
-    public interface OnSuccessCallback {
-        void onSuccess(@NonNull byte[] message, int length);
-    }
-
-    public interface OnFailureCallback {
-        void onFailure(@NonNull Exception exception);
     }
 }

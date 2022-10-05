@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.AssetFileDescriptor;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -133,11 +135,6 @@ public class WiFiActivity extends WirelessActivity {
             String message = editTextMessage.getText().toString();
             Log.d(TAG, "message: " + message);
             wifiDirect.write(message);
-        });
-
-        Button buttonUpload = findViewById(R.id.buttonUpload);
-        buttonUpload.setOnClickListener(view -> {
-            wifiDirect.upload(null);
         });
     }
 

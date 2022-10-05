@@ -10,8 +10,8 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Locale;
 
-public class SocketMessageReader {
-    private static final String TAG = SocketMessageReader.class.getSimpleName();
+public class LengthSocketReader implements SocketReader {
+    private static final String TAG = LengthSocketReader.class.getSimpleName();
 
     private static final int BUFFER_SIZE = 1024;
     private static final byte[] INCOMING_BUFF = new byte[BUFFER_SIZE];
@@ -29,7 +29,7 @@ public class SocketMessageReader {
     @Nullable
     private OnFailureCallback onFailureCallback;
 
-    public SocketMessageReader(@NonNull InputStream inputStream) {
+    public LengthSocketReader(@NonNull InputStream inputStream) {
         this.inputStream = inputStream;
     }
 
@@ -41,7 +41,9 @@ public class SocketMessageReader {
         this.onFailureCallback = onFailureCallback;
     }
 
-    public void receiveMessage() {
+    @Override
+    public void read() {
+        Log.d(TAG, "read() start.");
         try {
             byte[] lengthBuffer = new byte[4];
             inputStream.read(lengthBuffer);
@@ -100,12 +102,6 @@ public class SocketMessageReader {
                 return;
             }
 
-            long end = System.currentTimeMillis();
-            long diff = end - start;
-            Log.d(TAG, "diff: " + diff);
-            long bytesPerMilli = length / diff;
-            Log.d(TAG, "bytesPerMilli: " + bytesPerMilli);
-
             if (onSuccessCallback != null) {
                 onSuccessCallback.onSuccess(messageBuffer, length);
             }
@@ -114,14 +110,8 @@ public class SocketMessageReader {
             if (onFailureCallback != null) {
                 onFailureCallback.onFailure(e);
             }
+        } finally {
+            Log.d(TAG, "read() end.");
         }
-    }
-
-    public interface OnSuccessCallback {
-        void onSuccess(@NonNull byte[] message, int length);
-    }
-
-    public interface OnFailureCallback {
-        void onFailure(@NonNull Exception exception);
     }
 }

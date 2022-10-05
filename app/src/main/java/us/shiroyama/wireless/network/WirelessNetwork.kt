@@ -18,6 +18,5 @@ interface WirelessNetwork<T> {
     fun scan()
     fun connect(device: T)
     fun write(message: String)
-    fun upload(inputStream: InputStream)
     fun close()
 }
